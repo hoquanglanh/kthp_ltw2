@@ -1,0 +1,32 @@
+services:
+  backend:
+    build: ./cafe-backend
+    container_name: cafe_backend
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb+srv://lanhvivu1245_db_user:gyhg7RMp82pjxdEm@cluster0.tlabguy.mongodb.net/cafe_db
+      - SPRING_PROFILES_ACTIVE=prod
+      - JWT_SECRET=1Y5ZZ5OUwUX33pq0eUk5mztJ02L9ln2NTZDcI+1BOJvCcA2kqLF8J2jfiPP33tu8MFvmF1nmznHsKwrO69pO+w==
+      - JWT_EXPIRATION_MS=86400000
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./cafe-frontend
+    container_name: cafe_frontend
+    ports:
+      - "3001:80"
+    depends_on:
+      - backend
+
+  mongo:
+    image: mongo:6.0
+    container_name: cafe_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
