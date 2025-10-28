@@ -1,14 +1,14 @@
-# ================= BUILD STAGE =================
-FROM node:20-alpine AS build
+# --- Stage 1: build React ---
+FROM node:18-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 COPY . .
 RUN npm run build
 
-# ================= NGINX STAGE =================
-FROM nginx:1.25-alpine
-WORKDIR /usr/share/nginx/html
-COPY --from=build /app/build .
+# --- Stage 2: serve bằng Nginx ---
+FROM nginx:1.27-alpine
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /app/build /usr/share/nginx/html  
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

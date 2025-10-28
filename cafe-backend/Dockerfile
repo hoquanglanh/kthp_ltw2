@@ -5,7 +5,6 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-# ✅ build JAR bằng JDK 21
 RUN mvn clean package -DskipTests
 
 # ==================== RUNTIME STAGE ====================

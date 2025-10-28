@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   backend:
     build: ./cafe-backend
@@ -9,8 +11,8 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
       - JWT_SECRET=1Y5ZZ5OUwUX33pq0eUk5mztJ02L9ln2NTZDcI+1BOJvCcA2kqLF8J2jfiPP33tu8MFvmF1nmznHsKwrO69pO+w==
       - JWT_EXPIRATION_MS=86400000
-    depends_on:
-      - mongo
+    networks:
+      - app_net
 
   frontend:
     build: ./cafe-frontend
@@ -19,14 +21,9 @@ services:
       - "3001:80"
     depends_on:
       - backend
+    networks:
+      - app_net
 
-  mongo:
-    image: mongo:6.0
-    container_name: cafe_mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-
-volumes:
-  mongo_data:
+networks:
+  app_net:
+    driver: bridge

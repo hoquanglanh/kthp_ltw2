@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // 🧭 thêm
+import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
 import { getToken, isAdmin } from "../../utils/authUtils";
 import TableForm from "./TableForm";
@@ -203,16 +203,20 @@ export default function TableList() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleUpdateStatus(
-                              t.id,
-                              t.status === "AVAILABLE" ? "OCCUPIED" : "AVAILABLE"
-                            );
+
+                            let newStatus;
+                            if (t.status === "AVAILABLE") newStatus = "OCCUPIED";
+                            else if (t.status === "OCCUPIED") newStatus = "PAID";
+                            else newStatus = "AVAILABLE";
+
+                            handleUpdateStatus(t.id, newStatus);
                           }}
                           className="toggle-btn"
                         >
                           <span className="btn-icon">🔁</span>
                           Đổi trạng thái
                         </button>
+
                       </td>
                     )}
                   </tr>
